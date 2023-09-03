@@ -1,10 +1,10 @@
-import { MongoClient } from 'mongodb';
-import * as dotenv from 'dotenv';
+import { MongoClient } from "mongodb";
+import * as dotenv from "dotenv";
 dotenv.config();
-const connection = `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@cluster0.ulu0evt.mongodb.net/?retryWrites=true&w=majority`;
+const connection = `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@cluster0.sfe5hew.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(connection, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
 });
 
 const connectToDB = await client.connect();
