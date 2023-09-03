@@ -5,8 +5,10 @@ import { WebSocketServer } from 'ws';
 
 const app = express();
 app.use(cors({
-  origin: 'https://twitter-app-one.vercel.app',
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  origin: 'https://twitter-app-one.vercel.app', // Adres Twojej aplikacji klienta
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Dozwolone metody HTTP
+  allowedHeaders: 'Content-Type,Authorization', // Dozwolone nagłówki
+  credentials: true, // Włącz obsługę cookies lub innych danych uwierzytelniających (jeśli to potrzebne)
 }));
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
