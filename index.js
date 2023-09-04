@@ -45,6 +45,7 @@ wss.on("connection", (ws) => {
     });
   });
   ws.on("close", () => {
+    console.log("kutasisko");
     clients.delete(ws);
   });
 });
