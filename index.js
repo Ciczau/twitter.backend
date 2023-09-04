@@ -38,6 +38,7 @@ process.on("unhandledRejection", (reason, promise) => {
 wss.on("connection", (ws) => {
   clients.add(ws);
   ws.on("message", (mess) => {
+    console.log(mess);
     const data = JSON.parse(mess);
     clients.forEach((client) => {
       client.send(JSON.stringify(data));
