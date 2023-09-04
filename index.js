@@ -49,3 +49,8 @@ wss.on("connection", (ws) => {
     clients.delete(ws);
   });
 });
+setInterval(() => {
+  wss.clients.forEach((client) => {
+    client.send(new Date().toTimeString());
+  });
+}, 1000);
