@@ -39,10 +39,12 @@ wss.on("connection", (ws) => {
   clients.add(ws);
   ws.on("message", (mess) => {
     console.log(mess);
+    if(mess !== 'ping'){
     const data = JSON.parse(mess);
-    clients.forEach((client) => {
-      client.send(JSON.stringify(data));
-    });
+      clients.forEach((client) => {
+        client.send(JSON.stringify(data));
+      });
+    }
   });
   ws.on("close", () => {
     console.log("kutasisko");
