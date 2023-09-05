@@ -39,15 +39,15 @@ wss.on("connection", (ws) => {
   clients.add(ws);
   ws.on("message", (mess) => {
     console.log(mess);
-    if(mess !== 'ping'){
-    const data = JSON.parse(mess);
+    if (mess !== "ping") {
+      const data = JSON.parse(mess);
       clients.forEach((client) => {
+        console.log("wysylam");
         client.send(JSON.stringify(data));
       });
     }
   });
   ws.on("close", () => {
-    console.log("kutasisko");
     clients.delete(ws);
   });
 });
