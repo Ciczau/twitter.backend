@@ -150,6 +150,7 @@ export const getUserTweets = async (req, res) => {
     .find({
       $or: [{ nick: nick }, { repostBy: { $in: [nick] } }],
       reply: 0,
+      audience: "",
     })
     .sort({ _id: -1 })
     .toArray();
@@ -176,7 +177,7 @@ export const getUserTweets = async (req, res) => {
 export const getUserReplies = async (req, res) => {
   const { nick } = req.body;
   const result = await tweets
-    .find({ nick: nick, reply: 1 })
+    .find({ nick: nick, reply: 1, audience: "" })
     .sort({ _id: -1 })
     .toArray();
   return res.status(200).send({ result });
@@ -190,7 +191,7 @@ export const getUserLikes = async (req, res) => {
   });
   let result = [];
   for (let i = likesTab.length - 1; i >= 0; i--) {
-    const record = await tweets.findOne({ _id: likesTab[i] });
+    const record = await tweets.findOne({ _id: likesTab[i], audience: "" });
     result.push(record);
   }
 
