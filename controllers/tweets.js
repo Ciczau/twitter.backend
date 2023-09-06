@@ -191,8 +191,10 @@ export const getUserLikes = async (req, res) => {
   });
   let result = [];
   for (let i = likesTab.length - 1; i >= 0; i--) {
-    const record = await tweets.findOne({ _id: likesTab[i] });
-    result.push(record);
+    const record = await tweets.findOne({ _id: likesTab[i], audience: "" });
+    if (record !== null) {
+      result.push(record);
+    }
   }
 
   return res.status(200).send({ result });
