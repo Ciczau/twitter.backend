@@ -62,6 +62,7 @@ import {
   getUserCommunitiesTweets,
   joinCommunity,
 } from "../controllers/communities.js";
+import { sendQuestion } from "../controllers/question.js";
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -134,3 +135,5 @@ router.post("/community/get/tweets", getCommunityTweets);
 router.post("/communities/user/get", getUserCommunities);
 router.post("/communities/get/bykey", GetCommunitiesByKey);
 router.post("/communities/user/get/tweets", getUserCommunitiesTweets);
+
+router.post("/portfolio/question/send", sendQuestion);
