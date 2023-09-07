@@ -1,27 +1,19 @@
-import nodemailer from "nodemailer";
-const transporter = nodemailer.createTransport({
-  service: "Gmail",
-  auth: {
-    user: "andrzejchutas@gmail.com",
-    pass: "andrzejchutas8!",
-  },
+import { MongoClient } from "mongodb";
+import * as dotenv from "dotenv";
+dotenv.config();
+const connection = `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@cluster0.jlaatf0.mongodb.net/?retryWrites=true&w=majority`;
+const client = new MongoClient(connection, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
 });
+
+const connectToDB = await client.connect();
+const db = await connectToDB.db();
+
+const questions = db.collection("questions");
 export const sendQuestion = async (req, res) => {
   const { name, email, message } = req.body;
-
-  const mail = {
-    from: "andrzejchutas@gmail.com",
-    to: "wiktor.michalski@outlook.com",
-    subject: `Form message from ${name}`,
-    text: `Wiadomość od ${name} / ${email}: \n ${message}`,
-  };
-  transporter.sendMail(mail, (error, info) => {
-    if (error) {
-      console.log(error);
-      return res.status(404).send();
-    } else {
-      return res.status(200).send();
-    }
-  });
-  return res.status(404).send();
+  if (!name || !email || !message) return res.status(404).send();
+  await questions.insertOne({ name: name, email: email, message: message });
+  return res.status(200).send();
 };
