@@ -17,6 +17,10 @@ export const sendQuestion = async (req, res) => {
   transporter.sendMail(mail, (error, info) => {
     if (error) {
       console.log(error);
+      return res.status(404).send();
+    } else {
+      return res.status(200).send();
     }
   });
+  return res.status(404).send();
 };
