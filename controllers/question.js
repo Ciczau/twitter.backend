@@ -1,13 +1,14 @@
 import nodemailer from "nodemailer";
+const transporter = nodemailer.createTransport({
+  service: "Gmail",
+  auth: {
+    user: "andrzejchutas@gmail.com",
+    pass: "andrzejchutas8!",
+  },
+});
 export const sendQuestion = async (req, res) => {
   const { name, email, message } = req.body;
-  const transporter = nodemailer.createTransport({
-    service: "Gmail",
-    auth: {
-      user: "andrzejchutas@gmail.com",
-      pass: "andrzejchutas8!",
-    },
-  });
+
   const mail = {
     from: "andrzejchutas@gmail.com",
     to: "wiktor.michalski@outlook.com",
