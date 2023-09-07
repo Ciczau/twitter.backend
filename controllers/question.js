@@ -13,7 +13,15 @@ const db = await connectToDB.db();
 const questions = db.collection("questions");
 export const sendQuestion = async (req, res) => {
   const { name, email, message } = req.body;
-  if (!name || !email || !message) return res.status(404).send();
+  if (
+    !name ||
+    name === "" ||
+    !email ||
+    email === "" ||
+    !message ||
+    message === ""
+  )
+    return res.status(404).send();
   await questions.insertOne({ name: name, email: email, message: message });
   return res.status(200).send();
 };
