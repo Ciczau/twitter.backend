@@ -39,17 +39,23 @@ export const refreshToken = async (req, res) => {
 export const Register = async (req, res) => {
   const { email, nick, password, repeatPassword } = req.body;
   if (!email || !nick || !password || !repeatPassword)
-    return res.status(400).send({ msg: "Error" });
+    return res.status(400).send();
   if (password !== repeatPassword)
-    return res.status(403).send({ msg: "Passwords did not match" });
+    return res
+      .status(403)
+      .send({ errorCode: 1, message: "Passwords did not match" });
   const searchForUserByMail = await users.findOne({ email: email });
   const searchForUserByNick = await users.findOne({ nick: nick });
-  if (searchForUserByMail || searchForUserByNick)
+  if (searchForUserByMail)
     return res.status(409).send({
-      msg: "User already exists",
-      mail: searchForUserByMail,
-      nick: searchForUserByNick,
+      errorCode: 2,
+      message: "Email already in use",
     });
+
+  if (searchForUserByNick)
+    return res
+      .status(409)
+      .send({ errorCode: 3, message: "Nick already in use" });
   const salt = await bcrypt.genSalt(10);
   const encryptedPassword = await bcrypt.hash(password, salt);
   const refreshToken = generateRefreshToken(nick);
@@ -70,11 +76,15 @@ export const Register = async (req, res) => {
 
 export const Login = async (req, res) => {
   const { nick, password } = req.body;
-  if (!nick || !password) return res.status(400).send({ msg: "Error" });
+  if (!nick || !password) return res.status(400).send();
   const User = await users.findOne({ nick: nick });
-  if (!User) return res.status(404).send({ msg: "User not exists" });
+  if (!User)
+    return res
+      .status(404)
+      .send({ errorCode: 4, message: "User does not exists!" });
   const checkPassword = await bcrypt.compare(password, User.password);
-  if (!checkPassword) return res.status(401).send({ msg: "Wrong password" });
+  if (!checkPassword)
+    return res.status(401).send({ errorCode: 5, message: "Wrong password" });
   const refreshToken = generateRefreshToken(nick);
   await users.updateOne(
     { nick: nick },
