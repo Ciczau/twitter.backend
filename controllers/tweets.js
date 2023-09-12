@@ -121,19 +121,18 @@ export const getTweets = async (req, res) => {
   const result = [];
   response.forEach((item) => {
     result.push(item);
+
     item.repostBy?.forEach((repost) => {
-      result.push({ ...item, repost: [repost] });
+      result.push({ ...item, repost: repost });
     });
   });
   result.reverse().sort((a, b) => {
-    const aRepost = a.repost;
-    const bRepost = b.repost;
-    const aDate = aRepost?.date ? aRepost.date : a.date;
-    const bDate = bRepost?.date ? bRepost.date : b.date;
-
+    const aDate = a.repost !== undefined ? a.repost.date : a.date;
+    const bDate = b.repost !== undefined ? b.repost.date : b.date;
+    console.log(a);
     return new Date(bDate) - new Date(aDate);
   });
-  console.log(result);
+
   await tweets.updateMany({ audience: "" }, { $inc: { views: 1 } });
   return res.status(200).send({ result });
 };
