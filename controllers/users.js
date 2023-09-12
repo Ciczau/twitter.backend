@@ -2,16 +2,13 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { v2 as cloudinary } from "cloudinary";
 import fs from "fs";
-import * as dotenv from "dotenv";
-dotenv.config();
-
 import { generateAccessToken, generateRefreshToken } from "./token.js";
 import { users, follows, notifications } from "../database/collections.js";
 
 cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
+  cloud_name: `${process.env.CLOUDINARY_NAME}`,
+  api_key: `${process.env.CLOUDINARY_API_KEY}`,
+  api_secret: `${process.env.CLOUDINARY_API_SECRET}`,
 });
 
 export const refreshToken = async (req, res) => {
