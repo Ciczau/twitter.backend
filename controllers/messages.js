@@ -4,9 +4,9 @@ import { v2 as cloudinary } from "cloudinary";
 import { chats, users } from "../database/collections.js";
 
 cloudinary.config({
-  cloud_name: "df4tupotg",
-  api_key: "626447796253867",
-  api_secret: "mPXy5pytK8szulO6NY69mlAtP8Y",
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
 export const newChat = async (req, res) => {
