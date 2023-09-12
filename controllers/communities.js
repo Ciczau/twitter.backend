@@ -94,15 +94,13 @@ export const getUserCommunitiesTweets = async (req, res) => {
     result.push(item);
     item.repostBy?.forEach((repost) => {
       if (repost.nick === nick) {
-        result.push({ ...item, repost: [repost] });
+        result.push({ ...item, repost: repost });
       }
     });
   });
   result.reverse().sort((a, b) => {
-    const aRepost = a.repostBy.find((repost) => repost.nick === nick);
-    const bRepost = b.repostBy.find((repost) => repost.nick === nick);
-    const aDate = aRepost ? aRepost.date : a.date;
-    const bDate = bRepost ? bRepost.date : b.date;
+    const aDate = a.repost !== undefined ? a.repost.date : a.date;
+    const bDate = b.repost !== undefined ? b.repost.date : b.date;
     return new Date(bDate) - new Date(aDate);
   });
 
