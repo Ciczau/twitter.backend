@@ -2,6 +2,8 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { v2 as cloudinary } from "cloudinary";
 import fs from "fs";
+import * as dotenv from "dotenv";
+dotenv.config();
 
 import { generateAccessToken, generateRefreshToken } from "./token.js";
 import { users, follows, notifications } from "../database/collections.js";
@@ -153,6 +155,7 @@ export const EditProfile = async (req, res) => {
 
     return res.status(200).send();
   } catch (error) {
+    console.log(error);
     return res.status(500).send("Internal Server Error");
   }
 };

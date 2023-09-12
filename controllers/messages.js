@@ -2,6 +2,8 @@ import { db } from "../database/mongo.js";
 import { generateRandomCode } from "./users.js";
 import { v2 as cloudinary } from "cloudinary";
 import { chats, users } from "../database/collections.js";
+import * as dotenv from "dotenv";
+dotenv.config();
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_NAME,

@@ -1,6 +1,8 @@
 import { ObjectId } from "mongodb";
 import { v2 as cloudinary } from "cloudinary";
 import fs from "fs";
+import * as dotenv from "dotenv";
+dotenv.config();
 
 import {
   notifications,
