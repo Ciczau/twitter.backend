@@ -126,12 +126,14 @@ export const getTweets = async (req, res) => {
     });
   });
   result.reverse().sort((a, b) => {
-    const aRepost = a.repostBy;
-    const bRepost = b.repostBy;
+    const aRepost = a.repost;
+    const bRepost = b.repost;
     const aDate = aRepost?.date ? aRepost.date : a.date;
     const bDate = bRepost?.date ? bRepost.date : b.date;
+
     return new Date(bDate) - new Date(aDate);
   });
+  console.log(result);
   await tweets.updateMany({ audience: "" }, { $inc: { views: 1 } });
   return res.status(200).send({ result });
 };
