@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { v2 as cloudinary } from "cloudinary";
 import fs from "fs";
+import Joi from "joi";
 import { generateAccessToken, generateRefreshToken } from "./token.js";
 import { users, follows, notifications } from "../database/collections.js";
 
@@ -37,8 +38,22 @@ export const refreshToken = async (req, res) => {
 
 export const Register = async (req, res) => {
   const { email, nick, password, repeatPassword } = req.body;
-  if (!email || !nick || !password || !repeatPassword)
-    return res.status(400).send();
+  const schema = Joi.object().keys({
+    nick: Joi.string().alphanum().min(6).max(20).required(),
+    password: Joi.string().alphanum().min(8).max(30).required(),
+    repeatPassword: Joi.string().alphanum().min(8).max(30).required(),
+    email: Joi.string().email().min(3).max(50).required(),
+  });
+  const dataToValidate = {
+    nick: nick,
+    password: password,
+    repeatPassword: repeatPassword,
+    email: email,
+  };
+  const valid = schema.validate(dataToValidate);
+  if (valid.error || !email || !nick || !password || !repeatPassword) {
+    return res.status(404).send();
+  }
   if (password !== repeatPassword)
     return res
       .status(403)
@@ -75,7 +90,18 @@ export const Register = async (req, res) => {
 
 export const Login = async (req, res) => {
   const { nick, password } = req.body;
-  if (!nick || !password) return res.status(400).send();
+  const schema = Joi.object().keys({
+    nick: Joi.string().alphanum().min(6).max(20).required(),
+    password: Joi.string().alphanum().min(8).max(30).required(),
+  });
+  const dataToValidate = {
+    nick: nick,
+    password: password,
+  };
+  const valid = schema.validate(dataToValidate);
+  if (valid.error || !nick || !password) {
+    return res.status(404).send();
+  }
   const User = await users.findOne({ nick: nick });
   if (!User)
     return res
