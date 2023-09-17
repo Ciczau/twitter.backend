@@ -1,5 +1,5 @@
 import express from "express";
-import { sendQuestion } from "../controllers/question.js";
+import { sendContactQuestion, sendQuestion } from "../controllers/question.js";
 import { users } from "./users.js";
 import { tweets } from "./tweets.js";
 import { lists } from "./lists.js";
@@ -14,3 +14,4 @@ router.use(chat);
 router.use(communities);
 
 router.post("/portfolio/question/send", sendQuestion);
+router.post("/lawsite/question/send", sendContactQuestion);
