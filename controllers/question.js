@@ -1,31 +1,43 @@
-import { MongoClient } from "mongodb";
 import nodemailer from "nodemailer";
 import Joi from "joi";
-import * as dotenv from "dotenv";
-dotenv.config();
-const connection = `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@cluster0.jlaatf0.mongodb.net/?retryWrites=true&w=majority`;
-const client = new MongoClient(connection, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
+
+const transporter = nodemailer.createTransport({
+  service: "outlook",
+  auth: {
+    user: "bot15121@outlook.com",
+    pass: "haslo15121",
+  },
 });
-
-const connectToDB = await client.connect();
-const db = await connectToDB.db();
-
-const questions = db.collection("questions");
 export const sendQuestion = async (req, res) => {
   const { name, email, message } = req.body;
-  if (
-    !name ||
-    name === "" ||
-    !email ||
-    email === "" ||
-    !message ||
-    message === ""
-  )
+  const schema = Joi.object().keys({
+    email: Joi.string().email().max(50).required(),
+    name: Joi.string().alphanum().max(30).required(),
+    message: Joi.string().max(331).required(),
+  });
+  const dataToValidate = {
+    email: email,
+    name: name,
+    message: message,
+  };
+  const valid = schema.validate(dataToValidate);
+  if (valid.error || !email || !name || !message) {
     return res.status(404).send();
-  await questions.insertOne({ name: name, email: email, message: message });
-  return res.status(200).send();
+  }
+  const mailOptions = {
+    from: "bot15121@outlook.com",
+    to: "wiktor.michalski@outlook.com",
+    subject: `Question from ${email}`,
+    text: `Question from ${name} sent via Portfolio\n\n${message}`,
+  };
+  transporter.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      console.log(error);
+      return res.status(400).send();
+    } else {
+      return res.status(200).send();
+    }
+  });
 };
 
 export const sendContactQuestion = async (req, res) => {
@@ -46,16 +58,10 @@ export const sendContactQuestion = async (req, res) => {
   if (valid.error || !email || !phone || !text) {
     return res.status(404).send();
   }
-  const transporter = nodemailer.createTransport({
-    service: "outlook",
-    auth: {
-      user: "bot15121@outlook.com",
-      pass: "haslo15121",
-    },
-  });
+
   const mailOptions = {
     from: "bot15121@outlook.com",
-    to: "wiktor.michalski@outlook.com",
+    to: "kasia.szeller@outlook.com",
     subject: `Question from ${email}`,
     text: `Question from ${email} sent via Law Site\n\n${text}\n\nPhone number: ${phone}\n`,
   };
