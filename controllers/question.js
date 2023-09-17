@@ -1,13 +1,6 @@
 import nodemailer from "nodemailer";
 import Joi from "joi";
 
-const transporter = nodemailer.createTransport({
-  service: "outlook",
-  auth: {
-    user: "bot15121@outlook.com",
-    pass: "haslo15121",
-  },
-});
 export const sendQuestion = async (req, res) => {
   const { name, email, message } = req.body;
   const schema = Joi.object().keys({
@@ -24,6 +17,13 @@ export const sendQuestion = async (req, res) => {
   if (valid.error || !email || !name || !message) {
     return res.status(404).send();
   }
+  const transporter = nodemailer.createTransport({
+    service: "outlook",
+    auth: {
+      user: "bot15121@outlook.com",
+      pass: "haslo15121",
+    },
+  });
   const mailOptions = {
     from: "bot15121@outlook.com",
     to: "wiktor.michalski@outlook.com",
@@ -58,7 +58,13 @@ export const sendContactQuestion = async (req, res) => {
   if (valid.error || !email || !phone || !text) {
     return res.status(404).send();
   }
-
+  const transporter = nodemailer.createTransport({
+    service: "outlook",
+    auth: {
+      user: "bot15121@outlook.com",
+      pass: "haslo15121",
+    },
+  });
   const mailOptions = {
     from: "bot15121@outlook.com",
     to: "kasia.szeller@outlook.com",
